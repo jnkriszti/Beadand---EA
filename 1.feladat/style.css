@@ -1,0 +1,135 @@
+/* Az oldal flexbox-szal történő elrendezése */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+  }
+  
+  /* A tartalom kitölti a rendelkezésre álló helyet */
+  #content {
+    flex: 1;
+  }
+  
+  /* A diagram pozicionálása, hogy a footer előtt legyen */
+  canvas {
+    margin-top: 30px; /* Távolságot adunk a tartalom és a diagram között */
+    margin-bottom: 20px; /* Távolságot adunk a footer előtt */
+  }
+  
+  /* Footer pozicionálása az oldal alján */
+  footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: auto;
+  }
+  
+  
+  header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+  }
+  
+  h1 {
+    font-size: 2.5em;
+    margin: 0;
+  }
+  
+  nav {
+    background-color: #333;
+  }
+  
+  nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+  }
+  
+  nav ul li {
+    margin: 0 15px;
+  }
+  
+  nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 15px 20px;
+    display: block;
+    font-size: 1.2em;
+  }
+  
+  nav ul li a:hover,
+  nav ul li a.active {
+    background-color: #575757;
+    border-radius: 5px;
+  }
+  
+  aside, #content {
+    padding: 20px;
+    margin: 20px;
+  }
+  
+  
+  footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: auto;
+  }
+  
+  
+  button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  #zoo div {
+    margin: 10px 0;
+    font-size: 1.1em;
+  }
+  
+  .square {
+    width: 50px;
+    height: 50px;
+    background-color: #ddd;
+    margin: 5px;
+    display: inline-block;
+    font-size: 1.5em;
+    text-align: center;
+    line-height: 50px;
+    cursor: pointer;
+  }
+  
+  .square:hover {
+    background-color: #ccc;
+  }
+  
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  canvas {
+    margin-top: 30px; /* Távolságot adunk a tartalom és a diagram között */
+    margin-bottom: 20px; /* Távolságot adunk a footer előtt */
+  }
+  
+  
