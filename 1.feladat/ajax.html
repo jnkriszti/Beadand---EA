@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AJAX CRUD</title>
+  <title>AJAX feladat</title>
   <link rel="stylesheet" href="style.css" />
-  <script defer src="ajax.js"></script>
 </head>
 <body>
   <header>
@@ -24,48 +23,51 @@
   </nav>
 
   <aside>
-    <p>AJAX API kapcsolat CRUD funkciókkal.</p>
+    <p>AJAX menüpont</p>
   </aside>
 
   <div id="content">
-    <h2>AJAX API</h2>
+    <h2>AJAX feladat</h2>
 
     <section>
-      <h3>Read</h3>
-      <button onclick="loadData()">Adatok betöltése</button>
+      <h3>Read - Adatok lekérése</h3>
+      <button onclick="readData()">Adatok lekérése</button>
       <div id="dataList"></div>
       <div id="stats"></div>
     </section>
 
     <section>
-      <h3>Create</h3>
-      <input type="text" id="name" placeholder="Név">
-      <input type="number" id="height" placeholder="Magasság">
-      <input type="number" id="age" placeholder="Kor">
+      <h3>Create - Új adat hozzáadása</h3>
+      <input type="text" id="createName" placeholder="Név" />
+      <input type="text" id="createHeight" placeholder="Magasság" />
+      <input type="text" id="createWeight" placeholder="Súly" />
       <button onclick="createData()">Hozzáadás</button>
+      <div id="createMsg"></div>
     </section>
 
     <section>
-      <h3>Update</h3>
-      <input type="text" id="updateId" placeholder="ID">
-      <button onclick="getDataForId()">Adatok betöltése ID alapján</button><br>
-      <input type="text" id="updateName" placeholder="Név">
-      <input type="number" id="updateHeight" placeholder="Magasság">
-      <input type="number" id="updateAge" placeholder="Kor">
+      <h3>Update - Adat módosítása</h3>
+      <input type="text" id="updateId" placeholder="ID" />
+      <button onclick="getDataForId()">Adatok betöltése</button><br />
+      <input type="text" id="updateName" placeholder="Név" />
+      <input type="text" id="updateHeight" placeholder="Magasság" />
+      <input type="text" id="updateWeight" placeholder="Súly" />
       <button onclick="updateData()">Módosítás</button>
+      <div id="updateMsg"></div>
     </section>
 
     <section>
-      <h3>Delete</h3>
-      <input type="text" id="deleteId" placeholder="ID">
+      <h3>Delete - Adat törlése</h3>
+      <input type="text" id="deleteId" placeholder="ID" />
       <button onclick="deleteData()">Törlés</button>
+      <div id="deleteMsg"></div>
     </section>
-
-    <p id="message"></p>
   </div>
 
   <footer>
     <p>Készítő: Jóni Krisztina Vivien, Neptun: DNHDQM</p>
   </footer>
+
+  <script src="ajax.js"></script>
 </body>
 </html>

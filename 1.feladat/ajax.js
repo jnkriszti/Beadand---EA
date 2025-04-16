@@ -1,106 +1,113 @@
-const API_URL = 'https://retoolapi.dev/hDTV5a/data'; // Teszt API
+const API_URL = 'http://gamf.nhely.hu/ajax2/';
+const code = 'DNHDQMxyz123'; // IDE a saját kódod!
 
-function validateInput(str) {
-  return str && str.length > 0 && str.length <= 30;
-}
-
-function showMessage(msg, color = 'green') {
-  const el = document.getElementById('message');
-  el.textContent = msg;
-  el.style.color = color;
-}
-
-// READ
-function loadData() {
-  fetch(API_URL)
+function readData() {
+  fetch(API_URL, {
+    method: 'POST',
+    body: new URLSearchParams({ op: 'read', code })
+  })
     .then(res => res.json())
     .then(data => {
-      const list = document.getElementById('dataList');
-      list.innerHTML = data.map(d => `
-        <div>ID: ${d.id}, Név: ${d.name}, Magasság: ${d.height}, Kor: ${d.age}</div>
-      `).join('');
+      const list = data.list;
+      const dataList = document.getElementById('dataList');
+      const stats = document.getElementById('stats');
+      dataList.innerHTML = '';
+      stats.innerHTML = '';
 
-      const heights = data.map(d => Number(d.height)).filter(n => !isNaN(n));
-      if (heights.length > 0) {
-        const sum = heights.reduce((a, b) => a + b, 0);
-        const avg = (sum / heights.length).toFixed(2);
-        const max = Math.max(...heights);
-        document.getElementById('stats').innerHTML = `
-          <p>Magasságok összege: ${sum}</p>
-          <p>Átlag: ${avg}</p>
-          <p>Legnagyobb: ${max}</p>
-        `;
+      if (!list || list.length === 0) {
+        dataList.textContent = 'Nincs adat.';
+        return;
       }
+
+      list.forEach(item => {
+        dataList.innerHTML += `<p>ID: ${item.id}, Név: ${item.name}, Magasság: ${item.height}, Súly: ${item.weight}</p>`;
+      });
+
+      const heights = list.map(item => parseFloat(item.height)).filter(h => !isNaN(h));
+      const sum = heights.reduce((acc, h) => acc + h, 0);
+      const avg = (sum / heights.length).toFixed(2);
+      const max = Math.max(...heights);
+
+      stats.innerHTML = `<p>Magasság összeg: ${sum}, Átlag magasság: ${avg}, Legnagyobb magasság: ${max}</p>`;
     });
 }
 
-// CREATE
 function createData() {
-  const name = document.getElementById('name').value;
-  const height = document.getElementById('height').value;
-  const age = document.getElementById('age').value;
+  const name = document.getElementById('createName').value.trim();
+  const height = document.getElementById('createHeight').value.trim();
+  const weight = document.getElementById('createWeight').value.trim();
+  const msg = document.getElementById('createMsg');
 
-  if (![name, height, age].every(validateInput)) {
-    showMessage('Hibás adatbevitel (max 30 karakter, nem üres)', 'red');
+  if (!name || !height || !weight || name.length > 30) {
+    msg.textContent = 'Hibás adat!';
     return;
   }
 
   fetch(API_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, height, age })
+    body: new URLSearchParams({ op: 'create', name, height, weight, code })
   })
-  .then(res => res.json())
-  .then(() => {
-    showMessage('Sikeres hozzáadás!');
-    loadData();
-  });
-}
-
-// GET FOR UPDATE
-function getDataForId() {
-  const id = document.getElementById('updateId').value;
-  fetch(`${API_URL}/${id}`)
     .then(res => res.json())
-    .then(data => {
-      document.getElementById('updateName').value = data.name || '';
-      document.getElementById('updateHeight').value = data.height || '';
-      document.getElementById('updateAge').value = data.age || '';
+    .then(result => {
+      msg.textContent = result === 1 ? 'Sikeres hozzáadás!' : 'Sikertelen!';
+      readData();
     });
 }
 
-// UPDATE
-function updateData() {
-  const id = document.getElementById('updateId').value;
-  const name = document.getElementById('updateName').value;
-  const height = document.getElementById('updateHeight').value;
-  const age = document.getElementById('updateAge').value;
+function getDataForId() {
+  const id = document.getElementById('updateId').value.trim();
 
-  if (![name, height, age].every(validateInput)) {
-    showMessage('Hibás adatbevitel (max 30 karakter, nem üres)', 'red');
+  fetch(API_URL, {
+    method: 'POST',
+    body: new URLSearchParams({ op: 'read', code })
+  })
+    .then(res => res.json())
+    .then(data => {
+      const found = data.list.find(item => item.id === id);
+      if (found) {
+        document.getElementById('updateName').value = found.name;
+        document.getElementById('updateHeight').value = found.height;
+        document.getElementById('updateWeight').value = found.weight;
+      } else {
+        alert('Nem található ilyen ID!');
+      }
+    });
+}
+
+function updateData() {
+  const id = document.getElementById('updateId').value.trim();
+  const name = document.getElementById('updateName').value.trim();
+  const height = document.getElementById('updateHeight').value.trim();
+  const weight = document.getElementById('updateWeight').value.trim();
+  const msg = document.getElementById('updateMsg');
+
+  if (!id || !name || !height || !weight || name.length > 30) {
+    msg.textContent = 'Hibás adat!';
     return;
   }
 
-  fetch(`${API_URL}/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, height, age })
+  fetch(API_URL, {
+    method: 'POST',
+    body: new URLSearchParams({ op: 'update', id, name, height, weight, code })
   })
-  .then(res => res.json())
-  .then(() => {
-    showMessage('Sikeres módosítás!');
-    loadData();
-  });
+    .then(res => res.json())
+    .then(result => {
+      msg.textContent = result === 1 ? 'Sikeres módosítás!' : 'Sikertelen!';
+      readData();
+    });
 }
 
-// DELETE
 function deleteData() {
-  const id = document.getElementById('deleteId').value;
-  fetch(`${API_URL}/${id}`, {
-    method: 'DELETE'
+  const id = document.getElementById('deleteId').value.trim();
+  const msg = document.getElementById('deleteMsg');
+
+  fetch(API_URL, {
+    method: 'POST',
+    body: new URLSearchParams({ op: 'delete', id, code })
   })
-  .then(() => {
-    showMessage('Sikeres törlés!');
-    loadData();
-  });
+    .then(res => res.json())
+    .then(result => {
+      msg.textContent = result === 1 ? 'Sikeres törlés!' : 'Sikertelen!';
+      readData();
+    });
 }
