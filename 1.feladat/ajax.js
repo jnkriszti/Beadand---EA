@@ -1,5 +1,5 @@
 const API_URL = 'http://gamf.nhely.hu/ajax2/';
-const code = 'DNHDQMxyz123'; // IDE a saját kódod!
+const code = 'DNHDQM'; // IDE a saját kódod!
 
 function readData() {
   fetch(API_URL, {
